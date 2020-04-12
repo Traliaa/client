@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"go.bug.st/serial.v1"
 	"log"
 	"net/url"
 	"os"
@@ -14,6 +16,17 @@ import (
 var addr = flag.String("addr", "localhost:80", "http service address")
 
 func main() {
+	ports, err := serial.GetPortsList()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if len(ports) == 0 {
+		log.Fatal("No serial ports found!")
+	}
+	for _, port := range ports {
+		fmt.Printf("Found port: %v\n", port)
+	}
+
 	flag.Parse()
 	log.SetFlags(0)
 
