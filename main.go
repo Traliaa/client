@@ -12,22 +12,22 @@ import (
 )
 
 type smartDevice struct {
-	IdDevice int
-	IdIot    int
-	Name     string
-	Status   bool
+	idDevice int
+	idIOT    int
+	name     string
+	status   bool
 }
 
-type Websoket_data struct {
-	Id_device   int
-	Device_name string
-	Divice_info string
+type websocketData struct {
+	idDevice   int
+	deviceName string
+	devicaInfo string
 }
 
-type AuthDevice struct {
-	Username  string
-	Email     string
-	Processor string
+type authDevice struct {
+	username  string
+	email     string
+	processor string
 }
 
 var addr = flag.String("addr", "95.31.37.182:80", "http service address")
@@ -61,7 +61,7 @@ func main() {
 	go func() {
 		defer close(done)
 		for {
-			err := c.ReadJSON(&m)
+			err := c.Rea®dJSON(&m)
 			if err != nil {
 				logrus.Println("Error reading json.", err)
 			}
