@@ -64,9 +64,11 @@ func main() {
 			err := c.ReadJSON(&m)
 			if err != nil {
 				logrus.Println("Error reading json.", err)
+				return
 			}
 
 			logrus.Printf("Got message: %#v\n", m)
+
 
 		}
 	}()
@@ -83,6 +85,7 @@ func main() {
 			err = c.WriteJSON(&m)
 			if err != nil {
 				logrus.Println("Error reading json.", err)
+				return
 			}
 			logrus.Println(t)
 		case <-interrupt:
