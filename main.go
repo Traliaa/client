@@ -35,10 +35,10 @@ var addr = flag.String("addr", "95.31.37.182:80", "http service address")
 func main() {
 
 	m := smartDevice{
-		IdDevice: 001,
-		IdIot:    1,
-		Name:     "Led",
-		Status:   true,
+		idDevice: 001,
+		idIOT:    1,
+		name:     "Led",
+		status:   true,
 	}
 
 	findPorts()
@@ -61,7 +61,7 @@ func main() {
 	go func() {
 		defer close(done)
 		for {
-			err := c.Rea®dJSON(&m)
+			err := c.ReadJSON(&m)
 			if err != nil {
 				logrus.Println("Error reading json.", err)
 			}
