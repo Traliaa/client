@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 	"go.bug.st/serial.v1"
@@ -32,10 +31,11 @@ type authDevice struct {
 	email     string
 	processor string
 }
-type auth struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
+
+const (
+	userid   = "nogin"
+	password = "pedik"
+)
 
 var addr = flag.String("addr", "95.31.37.182:80", "http service address")
 
@@ -133,8 +133,9 @@ func Auth() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	response.Header.Set("Authorization", "email test password test")
-	response.Header.Set("Contetnt-Type", "application/json")
+	response.SetBasicAuth(userid, password)
+	//response.Header.Set("Authorization", "email test password test")
+	//response.Header.Set("Contetnt-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(response)
 	if err != nil {
@@ -144,5 +145,5 @@ func Auth() {
 	if err != nil {
 		logrus.Fatal(err)
 	}
-	fmt.Print(string(body))
+	logrus.Print(string(body))
 }
