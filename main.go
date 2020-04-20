@@ -2,9 +2,12 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/sirupsen/logrus"
 	"go.bug.st/serial.v1"
+	"io/ioutil"
+	"net/http"
 	"net/url"
 	"os"
 	"os/signal"
@@ -29,6 +32,10 @@ type authDevice struct {
 	email     string
 	processor string
 }
+type auth struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
 
 var addr = flag.String("addr", "95.31.37.182:80", "http service address")
 
@@ -46,7 +53,7 @@ func main() {
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
-
+	Auth()
 	u := url.URL{Scheme: "ws", Host: *addr, Path: "/echo"}
 	logrus.Printf("connecting to %s", u.String())
 
@@ -68,7 +75,6 @@ func main() {
 			}
 
 			logrus.Printf("Got message: %#v\n", m)
-
 
 		}
 	}()
@@ -119,4 +125,24 @@ func findPorts() {
 		logrus.Printf("Found port: %v\n", port)
 	}
 
+}
+
+func Auth() {
+
+	response, err := http.NewRequest("POST", "http://95.31.37.182/echo", nil)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	response.Header.Set("Authorization", "email test password test")
+	response.Header.Set("Contetnt-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(response)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		logrus.Fatal(err)
+	}
+	fmt.Print(string(body))
 }
