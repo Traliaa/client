@@ -54,7 +54,7 @@ func main() {
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
 	Auth()
-	u := url.URL{Scheme: "ws", Host: *addr, Path: "/echo"}
+	u := url.URL{Scheme: "ws", Host: *addr, Path: Auth()}
 	logrus.Printf("connecting to %s", u.String())
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
@@ -127,7 +127,7 @@ func findPorts() {
 
 }
 
-func Auth() {
+func Auth() string {
 
 	response, err := http.NewRequest("POST", "http://95.31.37.182/echo", nil)
 	if err != nil {
@@ -146,4 +146,5 @@ func Auth() {
 		logrus.Fatal(err)
 	}
 	logrus.Print(string(body))
+	return string(body)
 }
