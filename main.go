@@ -14,10 +14,10 @@ import (
 )
 
 type smartDevice struct {
-	idDevice int
-	idIOT    int
-	name     string
-	status   bool
+	IdDevice int
+	IdIOT    int
+	Name     string
+	Status   bool
 }
 
 type websocketData struct {
@@ -33,19 +33,19 @@ type authDevice struct {
 }
 
 const (
-	userid   = "nogin"
+	userid   = "nodgin"
 	password = "pedik"
 )
 
-var addr = flag.String("addr", "95.31.37.182:80", "http service address")
+var addr = flag.String("addr", "95.31.37.182", "http service address")
 
 func main() {
 
 	m := smartDevice{
-		idDevice: 001,
-		idIOT:    1,
-		name:     "Led",
-		status:   true,
+		IdDevice: 001,
+		IdIOT:    1,
+		Name:     "Led",
+		Status:   true,
 	}
 
 	findPorts()
@@ -53,8 +53,8 @@ func main() {
 
 	interrupt := make(chan os.Signal, 1)
 	signal.Notify(interrupt, os.Interrupt)
-	Auth()
-	u := url.URL{Scheme: "ws", Host: *addr, Path: Auth()}
+	a := Auth()
+	u := url.URL{Scheme: "ws", Host: *addr, Path: a}
 	logrus.Printf("connecting to %s", u.String())
 
 	c, _, err := websocket.DefaultDialer.Dial(u.String(), nil)
@@ -129,7 +129,7 @@ func findPorts() {
 
 func Auth() string {
 
-	response, err := http.NewRequest("POST", "http://95.31.37.182/echo", nil)
+	response, err := http.NewRequest("POST", "http://95.31.37.182/auth", nil)
 	if err != nil {
 		logrus.Fatal(err)
 	}
@@ -147,4 +147,5 @@ func Auth() string {
 	}
 	logrus.Print(string(body))
 	return string(body)
+
 }
